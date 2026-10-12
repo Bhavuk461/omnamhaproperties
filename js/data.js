@@ -1,13 +1,13 @@
 /* ==========================================================================
    OMNAMHAPROPERTIES — site content
    --------------------------------------------------------------------------
-   Edit this file to update the website. Contact details, reviews and
-   listings below are SAMPLE / PLACEHOLDER content — replace them with the
+   Edit this file to update the website. Reviews, testimonials and blog
+   posts below are SAMPLE / PLACEHOLDER content — replace them with the
    real details before going live.
 
-   Images: every listing, blog post and the about section render an empty
-   placeholder. Add an `image: 'images/your-photo.jpg'` field to any item
-   to show a photo instead.
+   Property photos and videos live in images/properties/<id>/ and videos/,
+   listed per property in js/media.js. Blog posts still use empty image
+   placeholders — add `image: 'images/your-photo.jpg'` to show one.
    ========================================================================== */
 
 window.SITE = {
@@ -31,205 +31,98 @@ window.SITE = {
 };
 
 /* --------------------------------------------------------------------------
-   Listings (SAMPLE)
-   price  — full amount in rupees (rent = monthly rent)
-   status — 'sale' | 'rent'
-   tags   — any of: 'Featured', 'Hot Deal', 'Premium', 'Brand New',
-            'New Booking', 'Pre-Leased'
-   featured: true — shows the property in the big featured slider
+   Listings
+   status   — 'sale' | 'rent' | null (shown as "Available" until confirmed)
+   price    — full amount in rupees (rent = per month); null = "Price on request"
+   area     — plot size in sq yd
+   parking  — number of car parks (or a short text like '2–4')
+   featured — true shows the property in the big featured slider
+   Photos and videos for each id are listed in js/media.js
    -------------------------------------------------------------------------- */
 window.PROPERTIES = [
   {
-    id: 'gk1-4bhk-furnished',
-    title: '4 BHK Luxuriously Furnished Builder Floor for Sale in Greater Kailash 1',
-    status: 'sale', tags: ['Featured', 'Hot Deal'], featured: true,
+    id: 'gk1-s-block-500yd',
+    title: '500 Sq Yd Builder Floor for Rent in S Block, Greater Kailash 1',
+    status: 'rent', tags: [], featured: true,
+    type: 'Builder Floor', floor: null,
+    locality: 'Greater Kailash 1',
+    address: 'S Block, Greater Kailash 1, New Delhi – 110048',
+    price: 325000, beds: null, baths: null, area: 500, parking: null,
+    added: '2026-10-11',
+    excerpt: 'A spacious floor on a 500 sq yd plot in S Block — one of the most sought-after pockets of Greater Kailash 1.',
+    features: ['500 sq yd plot', 'Prime S Block location']
+  },
+  {
+    id: 'gk-enclave-2-corner',
+    title: '400 Sq Yd Corner Floor with Lawn for Sale in GK Enclave 2',
+    status: 'sale', tags: ['Corner'], featured: true,
     type: 'Builder Floor', floor: '1st Floor',
+    locality: 'GK Enclave 2',
+    address: 'Greater Kailash Enclave 2, New Delhi – 110048',
+    price: 130000000, beds: 4, baths: 5, area: 400, parking: 2,
+    added: '2026-10-11',
+    excerpt: 'A beautiful corner first floor with four bedrooms, five toilets and separate drawing and dining areas, opening onto a big lawn at the back that faces a park. Peaceful surroundings, a servant room with toilet and a large room in the stilt.',
+    features: ['Corner property', 'Big lawn at the back', 'Park at the rear', 'Drawing & dining area', 'Servant room + toilet', 'Large room in stilt', '2 parallel car parks', 'Peaceful area']
+  },
+  {
+    id: 'nfc-terrace-floor',
+    title: '500 Sq Yd Third Floor with Terrace for Sale in New Friends Colony',
+    status: 'sale', tags: ['Terrace'], featured: true,
+    type: 'Builder Floor', floor: '3rd Floor + Terrace',
+    locality: 'New Friends Colony',
+    address: 'D Block, New Friends Colony, New Delhi – 110025',
+    price: 80000000, beds: null, baths: null, area: 500, parking: '2–4',
+    added: '2026-10-11',
+    excerpt: 'A 500 sq yd third floor on a wide road opposite Mata Mandir, with a private terrace reached through its own entrance from the floor and a room on the terrace. Plenty of space to park for residents and guests.',
+    features: ['Terrace with 1 room', 'Separate terrace entrance', 'Wide road', 'Opposite Mata Mandir', '1–2 cars in driveway', '1–2 cars outside', 'Ample guest parking']
+  },
+  {
+    id: 'gk2-s-block-furnished',
+    title: 'Fully Furnished Brand-New 4 BHK for Rent in S Block, Greater Kailash 2',
+    status: 'rent', tags: ['Fully Furnished', 'Brand New'], featured: true,
+    type: 'Builder Floor', floor: '2nd Floor',
+    locality: 'Greater Kailash 2',
+    address: 'S Block, Greater Kailash 2, New Delhi – 110048',
+    price: 250000, beds: 4, baths: null, area: 300, parking: 2,
+    added: '2026-10-11',
+    excerpt: 'Brand-new, new-height construction with new furniture throughout — four spacious bedrooms with attached bathrooms and a fully loaded kitchen, plus lift, stilt and two car parks.',
+    features: ['Fully furnished', 'Brand new · new height', 'Attached bathrooms', 'Fully loaded kitchen', 'Lift & stilt', '2 car parking']
+  },
+  {
+    id: 'gk1-m-block-terrace',
+    title: '4 BHK Third Floor with Terrace in M Block, Greater Kailash 1',
+    status: null, tags: ['Terrace'], featured: true,
+    type: 'Builder Floor', floor: '3rd Floor + Terrace',
     locality: 'Greater Kailash 1',
     address: 'M Block, Greater Kailash 1, New Delhi – 110048',
-    price: 90000000, beds: 4, baths: 4, area: 2700, photos: 14,
-    added: '2026-10-06',
-    excerpt: 'Fully furnished first-floor residence with four en-suite bedrooms, marble flooring, a modular kitchen and lift access — a short walk from M Block Market.',
-    features: ['Fully furnished', 'Lift', 'Stilt parking', 'Park facing']
+    price: null, beds: 4, baths: 5, area: 400, parking: 2,
+    added: '2026-10-11',
+    excerpt: 'A beautiful, well-maintained 4 BHK on the third floor with its own terrace, five washrooms, lift and stilt, and a two-car driveway.',
+    features: ['Private terrace', '5 washrooms', 'Lift & stilt', '2-car driveway', 'Well maintained']
   },
   {
-    id: 'crpark-3bhk-rent',
-    title: '3 BHK Fully Furnished Flat for Rent in CR Park',
-    status: 'rent', tags: ['Featured'], featured: true,
+    id: 'gk1-4bhk-brand-new',
+    title: 'Brand-New 4 BHK Builder Floor for Rent in Greater Kailash 1',
+    status: 'rent', tags: ['Brand New'], featured: false,
     type: 'Builder Floor', floor: '2nd Floor',
-    locality: 'Chittaranjan Park',
-    address: 'Chittaranjan Park, New Delhi – 110019',
-    price: 125000, beds: 3, baths: 3, area: 1460, photos: 9,
-    added: '2026-10-04',
-    excerpt: 'Bright second-floor home with three bedrooms and bathrooms, fully furnished, lift-equipped and with one dedicated car parking slot.',
-    features: ['Fully furnished', 'Lift', '1 car parking', 'Power backup']
-  },
-  {
-    id: 'panchsheel-luxury-floors',
-    title: 'Ultra-Luxury Multi-Level Builder Floors in Panchsheel Park',
-    status: 'sale', tags: ['Featured', 'Hot Deal'], featured: true,
-    type: 'Builder Floor', floor: 'Multi-Level',
-    locality: 'Panchsheel Park',
-    address: 'Panchsheel Park, New Delhi – 110017',
-    price: 280000000, beds: 6, baths: 7, area: 6200, photos: 25,
-    added: '2026-09-30',
-    excerpt: 'A rare multi-level residence in one of South Delhi’s most prestigious colonies, with double-height living, a private terrace and premium imported fittings.',
-    features: ['Private terrace', 'Home automation', 'Private lift', '4 car parking']
-  },
-  {
-    id: 'eok-4bhk-rent',
-    title: '4 Bedroom Semi-Furnished Flat for Rent in East of Kailash',
-    status: 'rent', tags: ['Featured'], featured: true,
-    type: 'Builder Floor', floor: '1st Floor',
-    locality: 'East of Kailash',
-    address: 'East of Kailash, New Delhi – 110065',
-    price: 180000, beds: 4, baths: 4, area: 3200, photos: 6,
-    added: '2026-09-27',
-    excerpt: 'Spacious semi-furnished first floor with four bedrooms and attached bathrooms, lift access and two stilt car parking spaces.',
-    features: ['Semi-furnished', 'Lift', '2 stilt parking', 'Servant room']
-  },
-  {
-    id: 'gk1-preleased-showroom',
-    title: 'Pre-Leased Ready-to-Move Showroom for Sale in Greater Kailash 1',
-    status: 'sale', tags: ['Featured', 'Pre-Leased'], featured: true,
-    type: 'Commercial', floor: 'Ground + 2 Floors',
     locality: 'Greater Kailash 1',
-    address: 'M Block Market, Greater Kailash 1, New Delhi – 110048',
-    price: 320000000, beds: 0, baths: 3, area: 4800, photos: 8,
-    added: '2026-09-22',
-    excerpt: 'High-street showroom with a running lease and assured rental income, in one of South Delhi’s busiest retail markets.',
-    features: ['Running lease', 'High footfall', 'Ready to move', 'Main road frontage']
+    address: 'Greater Kailash 1, New Delhi – 110048',
+    price: 350000, beds: 4, baths: null, area: 500, parking: 3,
+    added: '2026-10-11',
+    excerpt: 'A never-lived-in 4 BHK on the second floor of a 500 sq yd building, with its own separate gate and parking for three cars.',
+    features: ['Brand new, unused', 'Separate gate', '3 car parking', '500 sq yd plot']
   },
   {
-    id: 'hauzkhas-2bhk-rent',
-    title: '2 BHK Builder Floor for Rent in Hauz Khas',
-    status: 'rent', tags: [],
-    type: 'Builder Floor', floor: '2nd Floor',
-    locality: 'Hauz Khas',
-    address: 'Hauz Khas, New Delhi – 110016',
-    price: 75000, beds: 2, baths: 2, area: 1100, photos: 7,
-    added: '2026-10-05',
-    excerpt: 'Well-kept two-bedroom floor close to Hauz Khas Village and the Deer Park, ideal for working professionals.',
-    features: ['Semi-furnished', 'Park nearby', 'Covered parking']
-  },
-  {
-    id: 'gk2-3bhk-sale',
-    title: '3 BHK Builder Floor for Sale in Greater Kailash 2, E Block',
-    status: 'sale', tags: [],
-    type: 'Builder Floor', floor: '3rd Floor',
+    id: 'gk2-s-block-300yd',
+    title: 'Brand-New 300 Sq Yd First Floor for Rent in S Block, Greater Kailash 2',
+    status: 'rent', tags: ['Brand New'], featured: false,
+    type: 'Builder Floor', floor: '1st Floor',
     locality: 'Greater Kailash 2',
-    address: 'E Block, Greater Kailash 2, New Delhi – 110048',
-    price: 56000000, beds: 3, baths: 3, area: 1800, photos: 9,
-    added: '2026-10-03',
-    excerpt: 'Modern three-bedroom floor with a large living area, lift and stilt parking in a quiet, tree-lined block.',
-    features: ['Lift', 'Stilt parking', 'Modular kitchen']
-  },
-  {
-    id: 'hemkunt-3bhk-rent',
-    title: '3 BHK Builder Floor for Rent in Hemkunt Colony',
-    status: 'rent', tags: [],
-    type: 'Builder Floor', floor: 'Ground Floor',
-    locality: 'Hemkunt Colony',
-    address: 'Hemkunt Colony, Greater Kailash 1, New Delhi – 110048',
-    price: 150000, beds: 3, baths: 3, area: 2500, photos: 13,
-    added: '2026-10-02',
-    excerpt: 'Ground floor with a private lawn, three large bedrooms and easy access to Nehru Place and Greater Kailash markets.',
-    features: ['Private lawn', 'Fully furnished', '2 car parking']
-  },
-  {
-    id: 'lajpat2-2bhk-sale',
-    title: '2 BHK Builder Floor for Sale in Lajpat Nagar 2',
-    status: 'sale', tags: [],
-    type: 'Builder Floor', floor: '1st Floor',
-    locality: 'Lajpat Nagar 2',
-    address: 'Lajpat Nagar 2, New Delhi – 110024',
-    price: 21000000, beds: 2, baths: 2, area: 1000, photos: 8,
-    added: '2026-09-29',
-    excerpt: 'Compact, well-planned two-bedroom floor minutes from Lajpat Nagar Central Market and the metro station.',
-    features: ['Near metro', 'Lift', 'Ready to move']
-  },
-  {
-    id: 'eok-1bhk-rent',
-    title: '1 BHK Builder Floor for Rent in East of Kailash',
-    status: 'rent', tags: [],
-    type: 'Builder Floor', floor: '2nd Floor',
-    locality: 'East of Kailash',
-    address: 'East of Kailash, New Delhi – 110065',
-    price: 30000, beds: 1, baths: 1, area: 650, photos: 10,
-    added: '2026-09-28',
-    excerpt: 'Neat one-bedroom home with a separate kitchen and balcony, suited to singles or young couples.',
-    features: ['Balcony', 'Semi-furnished', 'Water backup']
-  },
-  {
-    id: 'lajpat3-3bhk-rent',
-    title: '3 BHK Builder Floor for Rent in Lajpat Nagar 3',
-    status: 'rent', tags: [],
-    type: 'Builder Floor', floor: '1st Floor',
-    locality: 'Lajpat Nagar 3',
-    address: 'Lajpat Nagar 3, New Delhi – 110024',
-    price: 160000, beds: 3, baths: 3, area: 1800, photos: 4,
-    added: '2026-09-25',
-    excerpt: 'Freshly renovated three-bedroom floor with lift and parking, close to schools and the Ring Road.',
-    features: ['Renovated', 'Lift', 'Stilt parking']
-  },
-  {
-    id: 'gk2-4bhk-premium',
-    title: '4 BHK Premium Builder Floor for Sale in Greater Kailash 2',
-    status: 'sale', tags: ['Premium'],
-    type: 'Builder Floor', floor: '2nd Floor',
-    locality: 'Greater Kailash 2',
-    address: 'Greater Kailash 2, New Delhi – 110048',
-    price: 160000000, beds: 4, baths: 5, area: 4450, photos: 9,
-    added: '2026-09-24',
-    excerpt: 'Premium 500-yard construction with four bedroom suites, a family lounge and high-end specifications throughout.',
-    features: ['500 sq yd plot', 'Private lift', 'VRV air-conditioning', 'Stilt parking']
-  },
-  {
-    id: 'defcol-2bhk-rent',
-    title: '2 BHK Builder Floor for Rent in Defence Colony',
-    status: 'rent', tags: [],
-    type: 'Builder Floor', floor: '1st Floor',
-    locality: 'Defence Colony',
-    address: 'Defence Colony, New Delhi – 110024',
-    price: 160000, beds: 2, baths: 2, area: 1300, photos: 5,
-    added: '2026-09-20',
-    excerpt: 'Elegant two-bedroom floor in a secure, central colony with quick access to Khan Market and Lodhi Road.',
-    features: ['Fully furnished', 'Park facing', 'Covered parking']
-  },
-  {
-    id: 'eok-3bhk-new-booking',
-    title: '3 BHK Brand New Builder Floor in East of Kailash (New Booking)',
-    status: 'sale', tags: ['Brand New', 'New Booking'],
-    type: 'Builder Floor', floor: 'Choice of Floors',
-    locality: 'East of Kailash',
-    address: 'East of Kailash, New Delhi – 110065',
-    price: 65000000, beds: 3, baths: 3, area: 1800, photos: 6,
-    added: '2026-09-18',
-    excerpt: 'New construction on a 200-yard plot, now open for booking — choose your floor and customise the interiors.',
-    features: ['Under construction', 'Lift', 'Stilt parking', 'Customisable interiors']
-  },
-  {
-    id: 'kalkaji-3bhk-flat',
-    title: '3 Bedroom Brand New Flat for Sale in Kalkaji (New Booking)',
-    status: 'sale', tags: ['Brand New'],
-    type: 'Apartment', floor: '4th Floor',
-    locality: 'Kalkaji',
-    address: 'Kalkaji, New Delhi – 110019',
-    price: 37000000, beds: 3, baths: 3, area: 1125, photos: 5,
-    added: '2026-09-15',
-    excerpt: 'Efficient three-bedroom apartment in a newly built block, close to the Kalkaji metro interchange.',
-    features: ['Near metro', 'Lift', 'Power backup']
-  },
-  {
-    id: 'saket-3bhk-sale',
-    title: '3 BHK Builder Floor for Sale in Saket',
-    status: 'sale', tags: [],
-    type: 'Builder Floor', floor: '1st Floor',
-    locality: 'Saket',
-    address: 'Saket, New Delhi – 110017',
-    price: 42500000, beds: 3, baths: 3, area: 1500, photos: 7,
-    added: '2026-09-12',
-    excerpt: 'Park-facing three-bedroom floor near Select Citywalk, with lift, stilt parking and good natural light.',
-    features: ['Park facing', 'Lift', 'Stilt parking']
+    address: 'S Block, Greater Kailash 2, New Delhi – 110048',
+    price: 250000, priceNote: '+ maintenance', beds: null, baths: null, area: 300, parking: 2,
+    added: '2026-10-11',
+    excerpt: 'A brand-new first floor on a 300 sq yd plot in S Block, Greater Kailash 2, with two car parks.',
+    features: ['Brand new', '300 sq yd plot', '2 car parking']
   }
 ];
 

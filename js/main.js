@@ -6,6 +6,7 @@
 
   const SITE = window.SITE;
   const PROPS = window.PROPERTIES || [];
+  const MEDIA = window.PROPERTY_MEDIA || {};
   const byId = Object.fromEntries(PROPS.map((p) => [p.id, p]));
 
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -32,13 +33,12 @@
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const icon = (name, cls = '') => `<svg class="ic ${cls}" aria-hidden="true"><use href="#i-${name}"/></svg>`;
   const STATUS_LABEL = { sale: 'For Sale', rent: 'For Rent' };
+  const statusLabel = (p) => STATUS_LABEL[p.status] || 'Available';
   const TAG_CLASS = {
-    'Featured': 'tag--featured',
-    'Hot Deal': 'tag--hot',
-    'Premium': 'tag--premium',
-    'Pre-Leased': 'tag--premium',
     'Brand New': 'tag--new',
-    'New Booking': 'tag--new'
+    'Fully Furnished': 'tag--premium',
+    'Terrace': 'tag--featured',
+    'Corner': 'tag--hot'
   };
 
   function priceParts(p) {
@@ -48,32 +48,69 @@
     return { num: v.toLocaleString('en-IN'), unit: '' };
   }
   function priceHTML(p) {
+    if (p.price == null) return '<span class="price-num price-num--ask">Price on Request</span>';
     const { num, unit } = priceParts(p);
     return `<span class="price-num">₹${num}</span>` +
       (unit ? `<span class="price-slash">/</span><span class="price-unit">${unit}</span>` : '') +
-      (p.status === 'rent' ? '<span class="price-per">per month</span>' : '');
+      (p.status === 'rent' ? '<span class="price-per">per month</span>' : '') +
+      (p.priceNote ? `<span class="price-note">${esc(p.priceNote)}</span>` : '');
   }
   function priceText(p) {
+    if (p.price == null) return 'Price on request';
     const { num, unit } = priceParts(p);
-    return `₹${num}${unit ? ' ' + unit : ''}${p.status === 'rent' ? ' / month' : ''}`;
+    return `₹${num}${unit ? ' ' + unit : ''}${p.status === 'rent' ? ' / month' : ''}${p.priceNote ? ' ' + p.priceNote : ''}`;
   }
   const dateText = (iso) => new Date(iso + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
-  const media = (item) => (item.image ? `<img src="${esc(item.image)}" alt="${esc(item.title)}" loading="lazy">` : '');
+  const typeLine = (p) => `${esc(p.type)}${p.floor ? ` · ${esc(p.floor)}` : ''}`;
   const waLink = (msg) => `https://wa.me/${SITE.whatsapp.number}${msg ? '?text=' + encodeURIComponent(msg) : ''}`;
   const enquiry = (p) => `Hi ${SITE.name}, I'm interested in "${p.title}" (${priceText(p)}). Please share more details.`;
 
-  /* ---------- Shared markup ---------- */
-  function tagsHTML(p) {
-    return `<span class="tag tag--status">${STATUS_LABEL[p.status]}</span>` +
-      (p.tags || []).map((t) => `<span class="tag ${TAG_CLASS[t] || 'tag--featured'}">${esc(t)}</span>`).join('');
+  /* ---------- Property media (listed in js/media.js) ---------- */
+  const photosOf = (p) => (MEDIA[p.id] && MEDIA[p.id].photos) || [];
+  const videoOf = (p) => (MEDIA[p.id] && MEDIA[p.id].video) || null;
+
+  function imgHTML(photo, { size = 'sm', alt = '', eager = false } = {}) {
+    return `<img class="ph-img" src="${photo.src}-${size}.webp" alt="${esc(alt)}" width="${photo.w}" height="${photo.h}" loading="${eager ? 'eager' : 'lazy'}" decoding="async">`;
   }
 
-  function metaHTML(p) {
+  // Cover photo on its dominant colour, or a designed "photos on request" panel
+  function coverHTML(p, opts = {}) {
+    const photo = photosOf(p)[0];
+    if (!photo) {
+      return `<div class="ph ph--empty"><svg class="logo-mark" aria-hidden="true"><use href="#i-logo"/></svg><span>Photos on request</span></div>`;
+    }
+    return `<div class="ph" style="--c:${photo.color}">${imgHTML(photo, { alt: p.title, ...opts })}</div>`;
+  }
+
+  function mediaCountHTML(p) {
+    const n = photosOf(p).length;
+    if (!n) return '';
+    const video = videoOf(p);
+    return `<span class="media-count" title="${n} photos${video ? ' and a video tour' : ''}">${icon('camera')}${n}` +
+      (video ? `<span class="media-count__sep"></span>${icon('play', 'ic--fill')}` : '') + '</span>';
+  }
+
+  function scrubBarsHTML(p) {
+    const n = Math.min(5, photosOf(p).length);
+    if (n < 2) return '';
+    return `<div class="scrub-bars" aria-hidden="true">${Array.from({ length: n }, (_, i) => `<i${i ? '' : ' class="is-on"'}></i>`).join('')}</div>`;
+  }
+
+  /* ---------- Shared markup ---------- */
+  const extraTagsHTML = (p) => (p.tags || []).map((t) => `<span class="tag ${TAG_CLASS[t] || 'tag--featured'}">${esc(t)}</span>`).join('');
+  const tagsHTML = (p) => `<span class="tag tag--status">${statusLabel(p)}</span>${extraTagsHTML(p)}`;
+
+  function metaItems(p) {
     const items = [];
-    if (p.beds) items.push(`<li title="Bedrooms">${icon('bed')}${p.beds}<span class="visually-hidden"> bedrooms</span></li>`);
-    if (p.baths) items.push(`<li title="Bathrooms">${icon('bath')}${p.baths}<span class="visually-hidden"> bathrooms</span></li>`);
-    items.push(`<li title="Area">${icon('area')}${p.area.toLocaleString('en-IN')} sq ft</li>`);
-    return `<ul class="prop-meta">${items.join('')}</ul>`;
+    if (p.beds) items.push(['bed', String(p.beds), 'Bedrooms', ' bedrooms']);
+    if (p.baths) items.push(['bath', String(p.baths), 'Bathrooms', ' bathrooms']);
+    if (p.area) items.push(['area', `${p.area.toLocaleString('en-IN')} sq yd`, 'Plot size', '']);
+    if (p.parking) items.push(['car', String(p.parking), 'Car parking', ' car parks']);
+    return items;
+  }
+  function metaHTML(p, listCls = 'prop-meta', itemCls = '') {
+    return `<ul class="${listCls}">${metaItems(p).map(([ic, val, title, sr]) =>
+      `<li${itemCls ? ` class="${itemCls}"` : ''} title="${title}">${icon(ic)}${esc(val)}${sr ? `<span class="visually-hidden">${sr}</span>` : ''}</li>`).join('')}</ul>`;
   }
 
   function actionsHTML(p, extra = '') {
@@ -85,53 +122,48 @@
 
   function cardHTML(p) {
     return `<article class="prop-card" role="listitem">
-      <div class="prop-card__thumb">
-        <div class="ph">${media(p)}</div>
+      <div class="prop-card__thumb" data-scrub="${p.id}">
+        ${coverHTML(p)}
         <button type="button" class="thumb-hit" data-view="${p.id}" aria-label="View ${esc(p.title)}"></button>
         <div class="prop-card__tags">${tagsHTML(p)}</div>
         <div class="prop-card__bottom">
-          <span class="media-count" title="Photos">${icon('camera')}${p.photos}</span>
+          ${mediaCountHTML(p) || '<span></span>'}
           ${actionsHTML(p)}
         </div>
+        ${scrubBarsHTML(p)}
       </div>
       <div class="prop-card__body">
+        <p class="prop-type">${typeLine(p)}</p>
         <h3 class="prop-title"><a href="#p-${p.id}" data-view="${p.id}">${esc(p.title)}</a></h3>
         <p class="prop-addr">${icon('pin')}<span>${esc(p.address)}</span></p>
-        <p class="prop-type">${esc(p.type)}</p>
         <div class="prop-price">${priceHTML(p)}</div>
         ${metaHTML(p)}
-        <p class="prop-added">${icon('calendar')}Added: ${dateText(p.added)}</p>
       </div>
     </article>`;
   }
 
   function listCardHTML(p, i) {
-    const extraTags = (p.tags || []).map((t) => `<span class="tag ${TAG_CLASS[t] || 'tag--featured'}">${esc(t)}</span>`).join('');
     return `<article class="list-card" style="--i:${i * 0.06}s">
-      <div class="list-card__thumb">
-        <div class="ph">${media(p)}</div>
+      <div class="list-card__thumb" data-scrub="${p.id}">
+        ${coverHTML(p)}
         <button type="button" class="thumb-hit" data-view="${p.id}" aria-label="View ${esc(p.title)}"></button>
-        <span class="media-count" title="Photos">${icon('camera')}${p.photos}</span>
+        <div class="prop-card__tags">${tagsHTML(p)}</div>
+        <div class="prop-card__bottom">${mediaCountHTML(p)}</div>
+        ${scrubBarsHTML(p)}
       </div>
       <div class="list-card__body">
         <div class="list-card__top">
           <div>
-            <div class="list-card__tags">
-              <span class="tag tag--outline">${STATUS_LABEL[p.status]}</span>${extraTags}
-              ${p.floor ? `<span class="floor-label">${esc(p.floor)}</span>` : ''}
-            </div>
+            <p class="prop-type">${typeLine(p)}</p>
             <h3 class="prop-title"><a href="#p-${p.id}" data-view="${p.id}">${esc(p.title)}</a></h3>
             <p class="prop-addr">${icon('pin')}<span>${esc(p.address)}</span></p>
           </div>
-          <div class="list-card__price">
-            <div class="prop-price">${priceHTML(p)}</div>
-            <p class="prop-type">${esc(p.type)}</p>
-          </div>
+          <div class="list-card__price"><div class="prop-price">${priceHTML(p)}</div></div>
         </div>
         <p class="list-card__excerpt">${esc(p.excerpt)}</p>
         ${metaHTML(p)}
         <div class="list-card__bottom">
-          <span class="prop-added">${icon('calendar')}Added: ${dateText(p.added)}</span>
+          <a href="#p-${p.id}" class="link-arrow" data-view="${p.id}">View details ${icon('arrow')}</a>
           ${actionsHTML(p, 'act--soft')}
         </div>
       </div>
@@ -199,6 +231,13 @@
     toastTimer = setTimeout(() => el.classList.remove('is-show'), 3000);
   }
 
+  /* ---------- Images fade in over their dominant colour once decoded ---------- */
+  function initImageFade() {
+    const isPh = (el) => el && el.classList && el.classList.contains('ph-img');
+    document.addEventListener('load', (e) => { if (isPh(e.target)) e.target.classList.add('is-loaded'); }, true);
+    document.addEventListener('error', (e) => { if (isPh(e.target)) e.target.classList.add('is-failed'); }, true);
+  }
+
   /* ==========================================================================
      Favourites & compare
      ========================================================================== */
@@ -261,7 +300,7 @@
     $('#compare-count').textContent = compare.length;
     $('#compare-chips').innerHTML = compare.map((id) => {
       const p = byId[id];
-      return `<span class="chip"><span>${esc(p.locality)} · ${p.beds ? p.beds + ' BHK' : esc(p.type)}</span>
+      return `<span class="chip"><span>${esc(p.locality)} · ${p.beds ? p.beds + ' BHK' : `${p.area} sq yd`}</span>
         <button type="button" data-cmp-remove="${id}" aria-label="Remove ${esc(p.title)} from compare">${icon('close')}</button></span>`;
     }).join('');
     const btn = $('#compare-open');
@@ -274,35 +313,55 @@
     $$('dialog[open]').forEach((d) => d.close());
   }
 
+  // Mosaic of the first photos; every tile opens the full-screen gallery
+  function galleryHTML(p) {
+    const photos = photosOf(p);
+    if (!photos.length) return `<div class="qv-gallery qv-gallery--empty">${coverHTML(p)}</div>`;
+    const shown = photos.slice(0, photos.length >= 5 ? 5 : Math.min(3, photos.length));
+    const tiles = shown.map((ph, i) => `<button type="button" class="qv-tile" data-lb="${p.id}" data-lb-index="${i}" aria-label="Open photo ${i + 1} of ${photos.length}">
+        <span class="ph" style="--c:${ph.color}">${imgHTML(ph, { size: i === 0 ? 'lg' : 'sm', alt: i === 0 ? p.title : '', eager: true })}</span>
+      </button>`).join('');
+    const video = videoOf(p);
+    return `<div class="qv-gallery qv-gallery--${shown.length}">
+      ${tiles}
+      <div class="qv-gallery__actions">
+        ${video ? `<button type="button" class="qv-chip qv-chip--dark" data-lb="${p.id}" data-lb-index="${photos.length}">${icon('play', 'ic--fill')}Video tour</button>` : ''}
+        <button type="button" class="qv-chip" data-lb="${p.id}" data-lb-index="0">${icon('grid')}Show all ${photos.length} photos</button>
+      </div>
+    </div>`;
+  }
+
   function openQuickView(id) {
     const p = byId[id];
     if (!p) return;
     closeModals();
-    $('#qv-content').innerHTML = `<div class="qv">
-      <div class="qv__media">
-        <div class="ph">${media(p)}</div>
-        <div class="prop-card__tags">${tagsHTML(p)}</div>
-        <span class="media-count">${icon('camera')}${p.photos} photos</span>
-      </div>
-      <div class="qv__body">
-        <p class="prop-type">${esc(p.type)}${p.floor ? ' · ' + esc(p.floor) : ''}</p>
-        <h2 class="qv__title" id="qv-title">${esc(p.title)}</h2>
-        <p class="prop-addr">${icon('pin')}<span>${esc(p.address)}</span></p>
-        <div class="prop-price qv__price">${priceHTML(p)}</div>
-        ${metaHTML(p)}
-        <p>${esc(p.excerpt)}</p>
-        ${p.features && p.features.length ? `<ul class="qv__features">${p.features.map((f) => `<li>${icon('check')}${esc(f)}</li>`).join('')}</ul>` : ''}
-        <p class="prop-added">${icon('calendar')}Added: ${dateText(p.added)}</p>
-        <div class="qv__btns">
-          <a class="btn btn--primary" href="tel:${esc(SITE.office.tel)}">${icon('phone')}Call Now</a>
-          <a class="btn btn--wa" href="${waLink(enquiry(p))}" target="_blank" rel="noopener">${icon('whatsapp')}WhatsApp</a>
+    const features = (p.features || []).map((f) => `<li>${icon('check')}${esc(f)}</li>`).join('');
+    const priceLabel = p.status === 'rent' ? 'Monthly rent' : p.status === 'sale' ? 'Asking price' : 'Price';
+    $('#qv-content').innerHTML = `${galleryHTML(p)}
+      <div class="qv-body">
+        <div class="qv-main">
+          <div class="qv-tags">${tagsHTML(p)}</div>
+          <p class="prop-type">${typeLine(p)}</p>
+          <h2 class="qv-title" id="qv-title">${esc(p.title)}</h2>
+          <p class="prop-addr">${icon('pin')}<span>${esc(p.address)}</span></p>
+          ${metaHTML(p, 'qv-meta', 'meta-box')}
+          <h3 class="qv-subhead">About this property</h3>
+          <p class="qv-desc">${esc(p.excerpt)}</p>
+          ${features ? `<h3 class="qv-subhead">Highlights</h3><ul class="qv-features">${features}</ul>` : ''}
         </div>
-        <div class="qv__secondary">
-          <button type="button" class="btn btn--soft" data-fav="${p.id}" aria-pressed="false">${icon('heart')}Save</button>
-          <button type="button" class="btn btn--soft" data-cmp="${p.id}" aria-pressed="false">${icon('compare')}Compare</button>
-        </div>
-      </div>
-    </div>`;
+        <aside class="qv-aside">
+          <div class="qv-price-card">
+            <span class="qv-price-label">${priceLabel}</span>
+            <div class="prop-price qv-price">${priceHTML(p)}</div>
+            <a class="btn btn--primary btn--block" href="tel:${esc(SITE.office.tel)}">${icon('phone')}Call ${esc(SITE.office.display)}</a>
+            <a class="btn btn--wa btn--block" href="${waLink(enquiry(p))}" target="_blank" rel="noopener">${icon('whatsapp')}Enquire on WhatsApp</a>
+            <div class="qv-secondary">
+              <button type="button" class="btn btn--soft" data-fav="${p.id}" aria-pressed="false">${icon('heart')}Save</button>
+              <button type="button" class="btn btn--soft" data-cmp="${p.id}" aria-pressed="false">${icon('compare')}Compare</button>
+            </div>
+          </div>
+        </aside>
+      </div>`;
     syncButtons();
     const dlg = $('#qv-modal');
     dlg.showModal();
@@ -316,14 +375,14 @@
     closeModals();
     const rows = [
       ['Price', (p) => priceText(p)],
-      ['Status', (p) => STATUS_LABEL[p.status]],
+      ['Status', (p) => statusLabel(p)],
       ['Type', (p) => p.type],
+      ['Floor', (p) => p.floor || '—'],
       ['Bedrooms', (p) => p.beds || '—'],
       ['Bathrooms', (p) => p.baths || '—'],
-      ['Area', (p) => `${p.area.toLocaleString('en-IN')} sq ft`],
-      ['Floor', (p) => p.floor || '—'],
-      ['Location', (p) => p.address],
-      ['Added', (p) => dateText(p.added)]
+      ['Plot size', (p) => (p.area ? `${p.area.toLocaleString('en-IN')} sq yd` : '—')],
+      ['Car parking', (p) => p.parking || '—'],
+      ['Location', (p) => p.address]
     ];
     $('#compare-content').innerHTML = `<div class="compare-wrap">
       <h2 id="compare-title">Compare Properties</h2>
@@ -331,7 +390,7 @@
         <table class="compare-table">
           <thead><tr>
             <td></td>
-            ${list.map((p) => `<th scope="col"><div class="ct-thumb"><div class="ph">${media(p)}</div></div><a href="#p-${p.id}" data-view="${p.id}">${esc(p.title)}</a></th>`).join('')}
+            ${list.map((p) => `<th scope="col"><div class="ct-thumb">${coverHTML(p)}</div><a href="#p-${p.id}" data-view="${p.id}">${esc(p.title)}</a></th>`).join('')}
           </tr></thead>
           <tbody>
             ${rows.map(([label, fn]) => `<tr><th scope="row">${label}</th>${list.map((p) => `<td>${esc(fn(p))}</td>`).join('')}</tr>`).join('')}
@@ -366,6 +425,157 @@
     };
     window.addEventListener('hashchange', openFromHash);
     openFromHash();
+  }
+
+  /* ==========================================================================
+     Full-screen gallery (photos + optional video tour)
+     ========================================================================== */
+  const lb = { items: [], index: 0, title: '' };
+
+  function openLightbox(id, start = 0) {
+    const p = byId[id];
+    if (!p) return;
+    lb.items = photosOf(p).map((ph) => ({ type: 'img', ...ph }));
+    const video = videoOf(p);
+    if (video) lb.items.push({ type: 'video', ...video });
+    if (!lb.items.length) return;
+    lb.title = p.title;
+
+    $('#lb-title').textContent = p.title;
+    $('#lb-stage').innerHTML = '';
+    $('#lb-thumbs').innerHTML = lb.items.map((it, i) => {
+      const isVideo = it.type === 'video';
+      return `<button type="button" class="lb__thumb" data-lb-go="${i}" style="--c:${it.color}" aria-label="${isVideo ? 'Video tour' : `Photo ${i + 1}`}">
+        <img src="${isVideo ? it.poster : it.src}-sm.webp" alt="" loading="lazy" decoding="async">
+        ${isVideo ? `<span class="lb__play">${icon('play', 'ic--fill')}</span>` : ''}
+      </button>`;
+    }).join('');
+    $('#lightbox').showModal();
+    lbShow(start, true);
+  }
+
+  function lbShow(i, instant = false) {
+    const n = lb.items.length;
+    lb.index = (i + n) % n;
+    const it = lb.items[lb.index];
+    const stage = $('#lb-stage');
+    $$('video', stage).forEach((v) => v.pause());
+
+    let el;
+    if (it.type === 'video') {
+      el = document.createElement('video');
+      el.src = it.src;
+      el.poster = `${it.poster}-lg.webp`;
+      el.controls = true;
+      el.playsInline = true;
+      el.preload = 'metadata';
+    } else {
+      el = new Image();
+      el.src = `${it.src}-lg.webp`;
+      el.alt = `${lb.title} — photo ${lb.index + 1}`;
+      el.decoding = 'async';
+    }
+    el.width = it.w;
+    el.height = it.h;
+    el.className = 'lb__media';
+    stage.appendChild(el);
+
+    const old = $$('.lb__media', stage).filter((m) => m !== el);
+    const reveal = () => {
+      requestAnimationFrame(() => el.classList.add('is-in'));
+      old.forEach((m) => {
+        m.classList.remove('is-in');
+        setTimeout(() => m.remove(), 450);
+      });
+    };
+    if (it.type === 'img' && el.decode) el.decode().then(reveal, reveal);
+    else reveal();
+
+    $('#lb-count').textContent = `${lb.index + 1} / ${n}`;
+    const strip = $('#lb-thumbs');
+    $$('.lb__thumb', strip).forEach((b, k) => b.setAttribute('aria-current', String(k === lb.index)));
+    const active = $(`[data-lb-go="${lb.index}"]`, strip);
+    if (active) {
+      strip.scrollTo({
+        left: active.offsetLeft - strip.clientWidth / 2 + active.offsetWidth / 2,
+        behavior: instant ? 'auto' : scrollBehavior()
+      });
+    }
+
+    // Warm up the neighbours so the arrows feel instant
+    [lb.index + 1, lb.index - 1].forEach((k) => {
+      const nb = lb.items[(k + n) % n];
+      if (nb.type === 'img') new Image().src = `${nb.src}-lg.webp`;
+    });
+  }
+
+  function initLightbox() {
+    const dlg = $('#lightbox');
+    const stage = $('#lb-stage');
+    $('[data-lb-prev]', dlg).addEventListener('click', () => lbShow(lb.index - 1));
+    $('[data-lb-next]', dlg).addEventListener('click', () => lbShow(lb.index + 1));
+    $('[data-close]', dlg).addEventListener('click', () => dlg.close());
+    $('#lb-thumbs').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-lb-go]');
+      if (b) lbShow(Number(b.dataset.lbGo));
+    });
+    stage.addEventListener('click', (e) => { if (e.target === stage) dlg.close(); });
+    dlg.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'VIDEO') return;
+      if (e.key === 'ArrowRight') { e.preventDefault(); lbShow(lb.index + 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); lbShow(lb.index - 1); }
+    });
+    dlg.addEventListener('close', () => {
+      $$('video', dlg).forEach((v) => v.pause());
+      stage.innerHTML = '';
+    });
+
+    let touchX = null;
+    stage.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+    stage.addEventListener('touchend', (e) => {
+      if (touchX === null) return;
+      const dx = e.changedTouches[0].clientX - touchX;
+      touchX = null;
+      if (Math.abs(dx) > 45) lbShow(lb.index + (dx < 0 ? 1 : -1));
+    });
+  }
+
+  /* ---------- Card photo scrubbing (desktop): move across a photo to flip through ---------- */
+  function initScrub() {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    const warmed = new Set();
+
+    const setIdx = (thumb, i) => {
+      if (thumb.dataset.idx === String(i)) return;
+      const photo = photosOf(byId[thumb.dataset.scrub])[i];
+      const img = $('.ph-img', thumb);
+      if (!photo || !img) return;
+      thumb.dataset.idx = i;
+      img.src = `${photo.src}-sm.webp`;
+      $('.ph', thumb).style.setProperty('--c', photo.color);
+      $$('.scrub-bars i', thumb).forEach((b, k) => b.classList.toggle('is-on', k === i));
+    };
+
+    document.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      const thumb = e.target.closest('[data-scrub]');
+      if (!thumb) return;
+      const id = thumb.dataset.scrub;
+      const photos = photosOf(byId[id]).slice(0, 5);
+      if (photos.length < 2) return;
+      if (!warmed.has(id)) {
+        warmed.add(id);
+        photos.forEach((ph) => { new Image().src = `${ph.src}-sm.webp`; });
+      }
+      const r = thumb.getBoundingClientRect();
+      const i = Math.min(photos.length - 1, Math.max(0, Math.floor(((e.clientX - r.left) / r.width) * photos.length)));
+      setIdx(thumb, i);
+    }, { passive: true });
+
+    document.addEventListener('pointerout', (e) => {
+      const thumb = e.target.closest && e.target.closest('[data-scrub]');
+      if (thumb && !thumb.contains(e.relatedTarget)) setIdx(thumb, 0);
+    });
   }
 
   /* ==========================================================================
@@ -427,20 +637,16 @@
 
     function fill() {
       const p = items[index];
-      stage.innerHTML = `<div class="ph">${media(p)}</div>
+      stage.innerHTML = `${coverHTML(p, { size: 'lg', eager: true })}
         <button type="button" class="thumb-hit" data-view="${p.id}" aria-label="View ${esc(p.title)}"></button>
-        <span class="media-count">${icon('camera')}${p.photos}</span>
+        ${mediaCountHTML(p)}
         ${actionsHTML(p)}`;
 
-      const metaBoxes = [];
-      if (p.beds) metaBoxes.push(`<li class="meta-box" title="Bedrooms">${icon('bed')}${p.beds}<span class="visually-hidden"> bedrooms</span></li>`);
-      if (p.baths) metaBoxes.push(`<li class="meta-box" title="Bathrooms">${icon('bath')}${p.baths}<span class="visually-hidden"> bathrooms</span></li>`);
-      metaBoxes.push(`<li class="meta-box" title="Area">${icon('area')}${p.area.toLocaleString('en-IN')} sq ft</li>`);
-
       content.innerHTML = `<div class="featured__tags">${tagsHTML(p)}</div>
+        <p class="prop-type">${typeLine(p)}</p>
         <h3 class="featured__title"><a href="#p-${p.id}" data-view="${p.id}">${esc(p.title)}</a></h3>
         <p class="prop-addr">${icon('pin')}<span>${esc(p.address)}</span></p>
-        <ul class="featured__meta">${metaBoxes.join('')}</ul>
+        ${metaHTML(p, 'featured__meta', 'meta-box')}
         <div class="prop-price featured__price">${priceHTML(p)}</div>
         <p class="featured__excerpt">${esc(p.excerpt)}</p>
         <div class="featured__btns">
@@ -454,9 +660,15 @@
       for (let k = 1; k <= Math.min(3, n - 1); k++) upcoming.push((index + k) % n);
       thumbs.innerHTML = upcoming.map((i) => {
         const t = items[i];
+        const c = photosOf(t)[0];
         return `<button type="button" class="thumb-btn" data-go="${i}" aria-label="Show ${esc(t.title)}">
-          <span class="ph">${media(t)}</span><span class="thumb-cap">${esc(t.locality)}</span></button>`;
+          ${c ? `<span class="ph" style="--c:${c.color}">${imgHTML(c, { alt: '' })}</span>` : '<span class="ph ph--empty"></span>'}
+          <span class="thumb-cap">${esc(t.locality)}</span></button>`;
       }).join('');
+
+      // Preload the next cover so the cross-fade lands on a ready image
+      const nextCover = photosOf(items[(index + 1) % n])[0];
+      if (nextCover) new Image().src = `${nextCover.src}-lg.webp`;
       syncButtons();
     }
 
@@ -482,7 +694,7 @@
     function start() {
       stop();
       if (reducedMotion.matches || n < 2 || !inView || hovering || document.hidden) return;
-      timer = setInterval(() => go(index + 1, false), 6500);
+      timer = setInterval(() => go(index + 1, false), 7000);
     }
     const restart = () => start();
 
@@ -535,9 +747,11 @@
 
   // Common local short forms people type when searching
   const ALIASES = [
-    [/greater kailash 1/i, 'gk1 gk-1 gk 1 gk'],
-    [/greater kailash 2/i, 'gk2 gk-2 gk 2 gk'],
+    [/greater kailash 1/i, 'gk1 gk-1 gk 1 gk'],
+    [/greater kailash 2/i, 'gk2 gk-2 gk 2 gk'],
+    [/greater kailash enclave/i, 'gk enclave gke'],
     [/greater kailash/i, 'gk'],
+    [/new friends colony/i, 'nfc'],
     [/east of kailash/i, 'eok'],
     [/chittaranjan park/i, 'cr park crpark'],
     [/defence colony/i, 'def col'],
@@ -553,13 +767,18 @@
     const tokens = listing.q.toLowerCase().split(/\s+/).filter(Boolean);
     if (tokens.length) {
       list = list.filter((p) => {
-        const hay = [p.title, p.address, p.locality, p.type, STATUS_LABEL[p.status], p.beds ? `${p.beds} bhk ${p.beds}bhk` : '', aliasText(p), ...(p.tags || [])].join(' ').toLowerCase();
+        const hay = [
+          p.title, p.address, p.locality, p.type, p.floor || '', statusLabel(p),
+          p.beds ? `${p.beds} bhk ${p.beds}bhk` : '',
+          p.area ? `${p.area} sq yd yards gaj` : '',
+          aliasText(p), ...(p.tags || [])
+        ].join(' ').toLowerCase();
         return tokens.every((t) => hay.includes(t));
       });
     }
 
-    if (listing.sort === 'price-asc') list.sort((a, b) => a.price - b.price);
-    else if (listing.sort === 'price-desc') list.sort((a, b) => b.price - a.price);
+    if (listing.sort === 'price-asc') list.sort((a, b) => (a.price ?? Infinity) - (b.price ?? Infinity));
+    else if (listing.sort === 'price-desc') list.sort((a, b) => (b.price ?? -Infinity) - (a.price ?? -Infinity));
     else list.sort((a, b) => b.added.localeCompare(a.added));
     return list;
   }
@@ -720,8 +939,9 @@
 
   function renderBlogs() {
     const posts = window.BLOGS || [];
+    const blogMedia = (b) => (b.image ? `<img src="${esc(b.image)}" alt="${esc(b.title)}" loading="lazy">` : '');
     $('#blog-grid').innerHTML = posts.map((b, i) => `<article class="blog-card" data-reveal style="--d:${i * 0.08}s">
-      <div class="blog-card__thumb"><div class="ph">${media(b)}</div><span class="tag tag--status">${esc(b.category)}</span></div>
+      <div class="blog-card__thumb"><div class="ph">${blogMedia(b)}</div><span class="tag tag--status">${esc(b.category)}</span></div>
       <div class="blog-card__body">
         <p class="prop-added">${icon('calendar')}${dateText(b.date)}</p>
         <h3>${esc(b.title)}</h3>
@@ -860,6 +1080,9 @@
       const rm = e.target.closest('[data-cmp-remove]');
       if (rm) { toggleCompare(rm.dataset.cmpRemove); return; }
 
+      const gallery = e.target.closest('[data-lb]');
+      if (gallery) { e.preventDefault(); openLightbox(gallery.dataset.lb, Number(gallery.dataset.lbIndex) || 0); return; }
+
       const view = e.target.closest('[data-view]');
       if (view) { e.preventDefault(); openQuickView(view.dataset.view); return; }
 
@@ -878,6 +1101,7 @@
   }
 
   /* ---------- Boot ---------- */
+  initImageFade();
   bindContacts();
   renderLatest();
   renderReviews();
@@ -889,6 +1113,8 @@
   renderTray();
   initDelegation();
   initModals();
+  initLightbox();
+  initScrub();
   initHeader();
   initFooterFallback();
   initCallbackForm();
