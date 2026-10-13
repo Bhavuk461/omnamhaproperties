@@ -185,6 +185,84 @@ window.PROPERTY_MEDIA = {
         "w": 1024,
         "h": 576,
         "color": "#646261"
+      },
+      {
+        "src": "images/properties/gk2-s-block-furnished/09",
+        "w": 1600,
+        "h": 720,
+        "color": "#ab967e"
+      },
+      {
+        "src": "images/properties/gk2-s-block-furnished/10",
+        "w": 1600,
+        "h": 720,
+        "color": "#82725e"
+      },
+      {
+        "src": "images/properties/gk2-s-block-furnished/11",
+        "w": 1600,
+        "h": 720,
+        "color": "#82735c"
+      },
+      {
+        "src": "images/properties/gk2-s-block-furnished/12",
+        "w": 1600,
+        "h": 720,
+        "color": "#9a8973"
+      },
+      {
+        "src": "images/properties/gk2-s-block-furnished/13",
+        "w": 1600,
+        "h": 720,
+        "color": "#a48c73"
+      },
+      {
+        "src": "images/properties/gk2-s-block-furnished/14",
+        "w": 739,
+        "h": 1600,
+        "color": "#907c66"
+      },
+      {
+        "src": "images/properties/gk2-s-block-furnished/15",
+        "w": 861,
+        "h": 1600,
+        "color": "#8e7460"
+      },
+      {
+        "src": "images/properties/gk2-s-block-furnished/16",
+        "w": 720,
+        "h": 1600,
+        "color": "#a59882"
+      },
+      {
+        "src": "images/properties/gk2-s-block-furnished/17",
+        "w": 720,
+        "h": 1600,
+        "color": "#9a8d78"
+      },
+      {
+        "src": "images/properties/gk2-s-block-furnished/18",
+        "w": 720,
+        "h": 1600,
+        "color": "#9c8973"
+      },
+      {
+        "src": "images/properties/gk2-s-block-furnished/19",
+        "w": 720,
+        "h": 1600,
+        "color": "#978772"
+      },
+      {
+        "src": "images/properties/gk2-s-block-furnished/20",
+        "w": 720,
+        "h": 1600,
+        "color": "#927e67"
+      },
+      {
+        "src": "images/properties/gk2-s-block-furnished/21",
+        "w": 720,
+        "h": 1600,
+        "color": "#645745"
       }
     ],
     "video": {
