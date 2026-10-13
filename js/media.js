@@ -1,6 +1,158 @@
 /* Generated from the property photo folders — lists each listing's photos
    (images/properties/<id>/NN-sm.webp + NN-lg.webp) and optional video. */
 window.PROPERTY_MEDIA = {
+  "gk1-triplex-rent": {
+    "photos": [
+      {
+        "src": "images/properties/gk1-triplex-rent/01",
+        "w": 960,
+        "h": 1280,
+        "color": "#8b8177"
+      },
+      {
+        "src": "images/properties/gk1-triplex-rent/02",
+        "w": 960,
+        "h": 1280,
+        "color": "#836b54"
+      },
+      {
+        "src": "images/properties/gk1-triplex-rent/03",
+        "w": 960,
+        "h": 1280,
+        "color": "#6d6254"
+      },
+      {
+        "src": "images/properties/gk1-triplex-rent/04",
+        "w": 960,
+        "h": 1280,
+        "color": "#877667"
+      },
+      {
+        "src": "images/properties/gk1-triplex-rent/05",
+        "w": 960,
+        "h": 1280,
+        "color": "#737371"
+      },
+      {
+        "src": "images/properties/gk1-triplex-rent/06",
+        "w": 960,
+        "h": 1280,
+        "color": "#85735a"
+      },
+      {
+        "src": "images/properties/gk1-triplex-rent/07",
+        "w": 960,
+        "h": 1280,
+        "color": "#796347"
+      },
+      {
+        "src": "images/properties/gk1-triplex-rent/08",
+        "w": 960,
+        "h": 1280,
+        "color": "#7a6c5c"
+      },
+      {
+        "src": "images/properties/gk1-triplex-rent/09",
+        "w": 960,
+        "h": 1280,
+        "color": "#938171"
+      },
+      {
+        "src": "images/properties/gk1-triplex-rent/10",
+        "w": 960,
+        "h": 1280,
+        "color": "#9f978d"
+      },
+      {
+        "src": "images/properties/gk1-triplex-rent/11",
+        "w": 960,
+        "h": 1280,
+        "color": "#7a6859"
+      },
+      {
+        "src": "images/properties/gk1-triplex-rent/12",
+        "w": 960,
+        "h": 1280,
+        "color": "#847e73"
+      }
+    ]
+  },
+  "kailash-colony-triplex": {
+    "photos": [
+      {
+        "src": "images/properties/kailash-colony-triplex/01",
+        "w": 1200,
+        "h": 1600,
+        "color": "#7c807e"
+      },
+      {
+        "src": "images/properties/kailash-colony-triplex/02",
+        "w": 1200,
+        "h": 1600,
+        "color": "#77736c"
+      },
+      {
+        "src": "images/properties/kailash-colony-triplex/03",
+        "w": 1200,
+        "h": 1600,
+        "color": "#87817a"
+      },
+      {
+        "src": "images/properties/kailash-colony-triplex/04",
+        "w": 1200,
+        "h": 1600,
+        "color": "#857b78"
+      },
+      {
+        "src": "images/properties/kailash-colony-triplex/05",
+        "w": 1200,
+        "h": 1600,
+        "color": "#918f88"
+      },
+      {
+        "src": "images/properties/kailash-colony-triplex/06",
+        "w": 1200,
+        "h": 1600,
+        "color": "#8a8989"
+      },
+      {
+        "src": "images/properties/kailash-colony-triplex/07",
+        "w": 1600,
+        "h": 1200,
+        "color": "#8c877e"
+      },
+      {
+        "src": "images/properties/kailash-colony-triplex/08",
+        "w": 1200,
+        "h": 1600,
+        "color": "#7b7873"
+      },
+      {
+        "src": "images/properties/kailash-colony-triplex/09",
+        "w": 1200,
+        "h": 1600,
+        "color": "#84817d"
+      },
+      {
+        "src": "images/properties/kailash-colony-triplex/10",
+        "w": 1200,
+        "h": 1600,
+        "color": "#8a8077"
+      },
+      {
+        "src": "images/properties/kailash-colony-triplex/11",
+        "w": 1200,
+        "h": 1600,
+        "color": "#70706f"
+      },
+      {
+        "src": "images/properties/kailash-colony-triplex/12",
+        "w": 1200,
+        "h": 1600,
+        "color": "#676160"
+      }
+    ]
+  },
   "gk1-4bhk-brand-new": {
     "photos": [
       {

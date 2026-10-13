@@ -41,6 +41,30 @@ window.SITE = {
    -------------------------------------------------------------------------- */
 window.PROPERTIES = [
   {
+    id: 'gk1-triplex-rent',
+    title: 'Brand-New Triplex for Rent in Greater Kailash 1',
+    status: 'rent', tags: ['Brand New'], featured: true,
+    type: 'Triplex', floor: null,
+    locality: 'Greater Kailash 1',
+    address: 'Greater Kailash 1, New Delhi – 110048',
+    price: 550000, beds: null, baths: null, area: 500, parking: null,
+    added: '2026-10-13',
+    excerpt: 'A brand-new triplex spread across three levels on a 500 sq yd plot in Greater Kailash 1, with its own separate gate and parking.',
+    features: ['Triplex — three levels', 'Brand new', 'Separate gate', 'Parking', '500 sq yd plot']
+  },
+  {
+    id: 'kailash-colony-triplex',
+    title: 'Brand-New Triplex for Rent in Kailash Colony',
+    status: 'rent', tags: ['Brand New'], featured: true,
+    type: 'Triplex', floor: null,
+    locality: 'Kailash Colony',
+    address: 'Kailash Colony, New Delhi – 110048',
+    price: 350000, beds: null, baths: null, area: 300, parking: null,
+    added: '2026-10-13',
+    excerpt: 'A brand-new triplex across three levels on a 300 sq yd plot in Kailash Colony, with its own separate gate and parking.',
+    features: ['Triplex — three levels', 'Brand new', 'Separate gate', 'Parking', '300 sq yd plot']
+  },
+  {
     id: 'gk1-s-block-500yd',
     title: '500 Sq Yd Builder Floor for Rent in S Block, Greater Kailash 1',
     status: 'rent', tags: [], featured: true,
