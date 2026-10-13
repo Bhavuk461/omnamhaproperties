@@ -549,102 +549,24 @@ window.PROPERTY_MEDIA = {
       },
       {
         "src": "images/properties/nfc-terrace-floor/11",
-        "w": 1600,
-        "h": 720,
-        "color": "#82735c"
-      },
-      {
-        "src": "images/properties/nfc-terrace-floor/12",
-        "w": 1600,
-        "h": 720,
-        "color": "#ab967e"
-      },
-      {
-        "src": "images/properties/nfc-terrace-floor/13",
-        "w": 1600,
-        "h": 720,
-        "color": "#9a8973"
-      },
-      {
-        "src": "images/properties/nfc-terrace-floor/14",
-        "w": 1600,
-        "h": 720,
-        "color": "#82725e"
-      },
-      {
-        "src": "images/properties/nfc-terrace-floor/15",
-        "w": 1600,
-        "h": 720,
-        "color": "#a48c73"
-      },
-      {
-        "src": "images/properties/nfc-terrace-floor/16",
-        "w": 739,
-        "h": 1600,
-        "color": "#907c66"
-      },
-      {
-        "src": "images/properties/nfc-terrace-floor/17",
-        "w": 861,
-        "h": 1600,
-        "color": "#8e7460"
-      },
-      {
-        "src": "images/properties/nfc-terrace-floor/18",
         "w": 747,
         "h": 1600,
         "color": "#988670"
       },
       {
-        "src": "images/properties/nfc-terrace-floor/19",
-        "w": 720,
-        "h": 1600,
-        "color": "#9a8d78"
-      },
-      {
-        "src": "images/properties/nfc-terrace-floor/20",
-        "w": 720,
-        "h": 1600,
-        "color": "#a59882"
-      },
-      {
-        "src": "images/properties/nfc-terrace-floor/21",
+        "src": "images/properties/nfc-terrace-floor/12",
         "w": 1024,
         "h": 1536,
         "color": "#8a775d"
       },
       {
-        "src": "images/properties/nfc-terrace-floor/22",
+        "src": "images/properties/nfc-terrace-floor/13",
         "w": 720,
         "h": 1600,
         "color": "#928471"
       },
       {
-        "src": "images/properties/nfc-terrace-floor/23",
-        "w": 720,
-        "h": 1600,
-        "color": "#645745"
-      },
-      {
-        "src": "images/properties/nfc-terrace-floor/24",
-        "w": 720,
-        "h": 1600,
-        "color": "#978772"
-      },
-      {
-        "src": "images/properties/nfc-terrace-floor/25",
-        "w": 720,
-        "h": 1600,
-        "color": "#927e67"
-      },
-      {
-        "src": "images/properties/nfc-terrace-floor/26",
-        "w": 720,
-        "h": 1600,
-        "color": "#9c8973"
-      },
-      {
-        "src": "images/properties/nfc-terrace-floor/27",
+        "src": "images/properties/nfc-terrace-floor/14",
         "w": 720,
         "h": 1600,
         "color": "#85715f"

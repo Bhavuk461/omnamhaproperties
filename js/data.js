@@ -90,12 +90,12 @@ window.PROPERTIES = [
   },
   {
     id: 'gk1-m-block-terrace',
-    title: '4 BHK Third Floor with Terrace in M Block, Greater Kailash 1',
-    status: null, tags: ['Terrace'], featured: true,
+    title: '4 BHK Third Floor with Terrace for Rent in M Block, Greater Kailash 1',
+    status: 'rent', tags: ['Terrace'], featured: true,
     type: 'Builder Floor', floor: '3rd Floor + Terrace',
     locality: 'Greater Kailash 1',
     address: 'M Block, Greater Kailash 1, New Delhi – 110048',
-    price: null, beds: 4, baths: 5, area: 400, parking: 2,
+    price: 350000, beds: 4, baths: 5, area: 400, parking: 2,
     added: '2026-10-11',
     excerpt: 'A beautiful, well-maintained 4 BHK on the third floor with its own terrace, five washrooms, lift and stilt, and a two-car driveway.',
     features: ['Private terrace', '5 washrooms', 'Lift & stilt', '2-car driveway', 'Well maintained']
