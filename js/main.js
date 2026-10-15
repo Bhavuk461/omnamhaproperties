@@ -752,6 +752,7 @@
     [/greater kailash enclave/i, 'gk enclave gke'],
     [/greater kailash/i, 'gk'],
     [/new friends colony/i, 'nfc'],
+    [/hauz khas enclave/i, 'hke'],
     [/east of kailash/i, 'eok'],
     [/chittaranjan park/i, 'cr park crpark'],
     [/defence colony/i, 'def col'],

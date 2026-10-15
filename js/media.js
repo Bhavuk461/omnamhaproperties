@@ -1,6 +1,160 @@
 /* Generated from the property photo folders — lists each listing's photos
    (images/properties/<id>/NN-sm.webp + NN-lg.webp) and optional video. */
 window.PROPERTY_MEDIA = {
+  "hauz-khas-enclave-4bhk": {
+    "photos": [
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/01",
+        "w": 1600,
+        "h": 900,
+        "color": "#bbb3a9"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/02",
+        "w": 1600,
+        "h": 900,
+        "color": "#b7a085"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/03",
+        "w": 1600,
+        "h": 900,
+        "color": "#9d947f"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/04",
+        "w": 1600,
+        "h": 900,
+        "color": "#baa996"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/05",
+        "w": 1600,
+        "h": 900,
+        "color": "#ccbdab"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/06",
+        "w": 1600,
+        "h": 900,
+        "color": "#8c8979"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/07",
+        "w": 1600,
+        "h": 900,
+        "color": "#7f8869"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/08",
+        "w": 1600,
+        "h": 900,
+        "color": "#b9aea6"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/09",
+        "w": 1600,
+        "h": 900,
+        "color": "#9d9479"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/10",
+        "w": 1600,
+        "h": 900,
+        "color": "#968c7c"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/11",
+        "w": 1600,
+        "h": 900,
+        "color": "#96978e"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/12",
+        "w": 1600,
+        "h": 900,
+        "color": "#9d9787"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/13",
+        "w": 1600,
+        "h": 900,
+        "color": "#a09281"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/14",
+        "w": 1600,
+        "h": 900,
+        "color": "#918b7c"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/15",
+        "w": 1600,
+        "h": 900,
+        "color": "#9a8265"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/16",
+        "w": 1600,
+        "h": 900,
+        "color": "#ad9f83"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/17",
+        "w": 1600,
+        "h": 900,
+        "color": "#a7936f"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/18",
+        "w": 1600,
+        "h": 900,
+        "color": "#b1a394"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/19",
+        "w": 1600,
+        "h": 900,
+        "color": "#89795f"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/20",
+        "w": 1600,
+        "h": 900,
+        "color": "#897b61"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/21",
+        "w": 1600,
+        "h": 900,
+        "color": "#878277"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/22",
+        "w": 1600,
+        "h": 900,
+        "color": "#7d7662"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/23",
+        "w": 1600,
+        "h": 900,
+        "color": "#978063"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/24",
+        "w": 1600,
+        "h": 900,
+        "color": "#a7a18d"
+      },
+      {
+        "src": "images/properties/hauz-khas-enclave-4bhk/25",
+        "w": 1600,
+        "h": 900,
+        "color": "#8b8479"
+      }
+    ]
+  },
   "gk1-triplex-rent": {
     "photos": [
       {

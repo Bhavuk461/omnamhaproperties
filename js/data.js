@@ -41,6 +41,18 @@ window.SITE = {
    -------------------------------------------------------------------------- */
 window.PROPERTIES = [
   {
+    id: 'hauz-khas-enclave-4bhk',
+    title: 'Luxury Fully Furnished 4 BHK for Rent in Hauz Khas Enclave',
+    status: 'rent', tags: ['Fully Furnished'], featured: true,
+    type: 'Apartment', floor: '2nd Floor',
+    locality: 'Hauz Khas Enclave',
+    address: 'K Block, Hauz Khas Enclave, New Delhi – 110016',
+    price: 320000, priceNote: 'incl. maintenance', beds: 4, baths: null, area: null, parking: 2,
+    added: '2026-10-16',
+    excerpt: 'A spacious, beautifully furnished and fully equipped 4 BHK on the second floor, ready for plug-and-play move-in. Professionally managed, with lift access, genset power backup and two car parks — ideal for corporates, expats, diplomats and business families.',
+    features: ['Fully furnished & equipped', 'Plug-and-play move-in', 'Lift access', 'Genset power backup', '2 car parking', 'Professionally managed', 'Rent includes maintenance']
+  },
+  {
     id: 'gk1-triplex-rent',
     title: 'Brand-New Triplex for Rent in Greater Kailash 1',
     status: 'rent', tags: ['Brand New'], featured: true,
